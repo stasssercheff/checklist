@@ -3,128 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <title>Чеклист для поваров</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 700px;
-      margin: 20px auto;
-      padding: 30px;
-      background: #f7f7f7;
-      border-radius: 12px;
-      font-size: 18px;
-    }
-    .check-item {
-      margin-bottom: 25px;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      font-size: 18px;
-    }
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      font-size: 18px;
-      border-radius: 6px;
-      border: 1px solid #bbb;
-    }
-    .lang-switch {
-      margin-bottom: 30px;
-    }
-    .lang-switch button {
-      margin-right: 10px;
-      padding: 8px 16px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .date-selects select {
-      width: 32%;
-      display: inline-block;
-      margin-right: 2%;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Переключение языка -->
-  <div class="lang-switch">
-    <button onclick="switchLanguage('ru')">RU</button>
-    <button onclick="switchLanguage('en')">EN</button>
-  </div>
+  <div class="container">
 
-  <!-- Имя -->
-  <div class="check-item">
-    <label class="check-label" data-ru="Имя" data-en="Name">Имя</label>
-    <select name="chef" data-label-ru="Имя" data-label-en="Name">
-      <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
-      <option value="maxim" data-ru="Максим" data-en="Maksim">Максим</option>
-      <option value="bakha" data-ru="Баха" data-en="Bakha">Баха</option>
-      <option value="miguel" data-ru="Miguel" data-en="Miguel">Miguel</option>
-    </select>
-  </div>
+    <!-- Переключение языка -->
+    <div class="lang-switch">
+      <button onclick="switchLanguage('ru')">RU</button>
+      <button onclick="switchLanguage('en')">EN</button>
+    </div>
 
-  <!-- Дата -->
-  <div class="check-item">
-    <label class="check-label" data-ru="Дата" data-en="Date">Дата</label>
-    <div class="date-selects">
-      <select name="day" class="no-translate">
-        <option disabled selected>День</option>
-        <option>01</option><option>02</option><option>03</option><option>04</option>
-        <option>05</option><option>06</option><option>07</option><option>08</option>
-        <option>09</option><option>10</option><option>11</option><option>12</option>
-        <option>13</option><option>14</option><option>15</option><option>16</option>
-        <option>17</option><option>18</option><option>19</option><option>20</option>
-        <option>21</option><option>22</option><option>23</option><option>24</option>
-        <option>25</option><option>26</option><option>27</option><option>28</option>
-        <option>29</option><option>30</option><option>31</option>
-      </select>
-      <select name="month" class="no-translate">
-        <option disabled selected>Месяц</option>
-        <option>01</option><option>02</option><option>03</option>
-        <option>04</option><option>05</option><option>06</option>
-        <option>07</option><option>08</option><option>09</option>
-        <option>10</option><option>11</option><option>12</option>
-      </select>
-      <select name="year" class="no-translate">
-        <option disabled selected>Год</option>
-        <option>2025</option>
-        <option>2024</option>
-        <option>2023</option>
+    <!-- Дата -->
+    <div class="check-item row no-translate">
+      <label class="check-label" data-ru="Дата" data-en="Date">Дата</label>
+      <div class="date-group">
+        <select name="day">
+          <option disabled selected>ДД</option>
+          ${[...Array(31)].map((_, i) => `<option>${String(i + 1).padStart(2, '0')}</option>`).join('')}
+        </select>
+        <select name="month">
+          <option disabled selected>ММ</option>
+          ${[...Array(12)].map((_, i) => `<option>${String(i + 1).padStart(2, '0')}</option>`).join('')}
+        </select>
+        <select name="year">
+          <option>2025</option>
+          <option>2024</option>
+          <option>2023</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Имя -->
+    <div class="check-item row">
+      <label class="check-label" data-ru="Имя" data-en="Name">Имя</label>
+      <select name="chef" data-label-ru="Имя" data-label-en="Name">
+        <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
+        <option value="maxim" data-ru="Максим" data-en="Maksim">Максим</option>
+        <option value="bakha" data-ru="Баха" data-en="Bakha">Баха</option>
+        <option value="miguel" data-ru="Miguel" data-en="Miguel">Miguel</option>
       </select>
     </div>
+
+    <!-- Пример блока -->
+    <div class="section-title" data-ru="Оборудование" data-en="Equipment">Оборудование</div>
+
+    <div class="check-item row">
+      <label class="check-label" data-ru="Болитор" data-en="Bolitor">Болитор</label>
+      <select name="bolitor" data-label-ru="Болитор" data-label-en="Bolitor">
+        <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
+        <option value="washed" data-ru="Помыто" data-en="Washed">Помыто</option>
+        <option value="messed" data-ru="Проебал" data-en="Messed up">Проебал</option>
+      </select>
+    </div>
+
+    <div class="check-item row">
+      <label class="check-label" data-ru="Плита" data-en="Stove">Плита</label>
+      <select name="stove" data-label-ru="Плита" data-label-en="Stove">
+        <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
+        <option value="washed" data-ru="Помыто" data-en="Washed">Помыто</option>
+        <option value="messed" data-ru="Проебал" data-en="Messed up">Проебал</option>
+      </select>
+    </div>
+
   </div>
 
-  <!-- Пример: Оборудование -->
-  <div class="check-item">
-    <label class="check-label" data-ru="Болитор" data-en="Bolitor">Болитор</label>
-    <select name="bolitor" data-label-ru="Болитор" data-label-en="Bolitor">
-      <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
-      <option value="washed" data-ru="Помыто" data-en="Washed">Помыто</option>
-      <option value="messed" data-ru="Проебал" data-en="Messed up">Проебал</option>
-    </select>
-  </div>
-
-  <div class="check-item">
-    <label class="check-label" data-ru="Плита" data-en="Stove">Плита</label>
-    <select name="stove" data-label-ru="Плита" data-label-en="Stove">
-      <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
-      <option value="washed" data-ru="Помыто" data-en="Washed">Помыто</option>
-      <option value="messed" data-ru="Проебал" data-en="Messed up">Проебал</option>
-    </select>
-  </div>
-
-  <!-- JS-переключатель языка -->
   <script>
     function switchLanguage(lang) {
       document.querySelectorAll('.check-label').forEach(label => {
         label.textContent = label.dataset[lang];
       });
+      document.querySelectorAll('.section-title').forEach(title => {
+        title.textContent = title.dataset[lang];
+      });
       document.querySelectorAll('select:not(.no-translate)').forEach(select => {
         Array.from(select.options).forEach(opt => {
-          if (opt.dataset[lang]) {
-            opt.textContent = opt.dataset[lang];
-          }
+          if (opt.dataset[lang]) opt.textContent = opt.dataset[lang];
         });
       });
     }
