@@ -1,1 +1,45 @@
-1
+body {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 30px;
+  background: #f7f7f7;
+  border-radius: 12px;
+  font-size: 18px; /* увеличенный шрифт */
+}
+
+.check-item {
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 18px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+}
+
+.lang-switch {
+  margin-bottom: 30px;
+}
+
+.lang-switch button {
+  margin-right: 10px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.date-selects select {
+  width: 32%;
+  display: inline-block;
+  margin-right: 2%;
+}
