@@ -1,45 +1,71 @@
 body {
   font-family: Arial, sans-serif;
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 30px;
+  font-size: 20px;
   background: #f7f7f7;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 30px;
+  background: #fff;
   border-radius: 12px;
-  font-size: 18px; /* увеличенный шрифт */
-}
-
-.check-item {
-  margin-bottom: 25px;
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  font-size: 18px;
-}
-
-select {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 18px;
-  border-radius: 6px;
-  border: 1px solid #bbb;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
 }
 
 .lang-switch {
   margin-bottom: 30px;
+  text-align: right;
 }
 
 .lang-switch button {
-  margin-right: 10px;
+  font-size: 18px;
   padding: 8px 16px;
-  font-size: 16px;
+  margin-left: 10px;
   cursor: pointer;
 }
 
-.date-selects select {
-  width: 32%;
-  display: inline-block;
-  margin-right: 2%;
+.section-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 30px 0 15px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.check-item.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 30px;
+}
+
+.check-label {
+  flex: 1;
+  font-weight: 600;
+}
+
+.check-item select {
+  flex: 1;
+  padding: 12px;
+  font-size: 18px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.date-group {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+}
+
+.date-group select {
+  flex: 1;
+  padding: 12px;
+  font-size: 18px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
