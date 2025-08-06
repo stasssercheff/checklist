@@ -2,11 +2,10 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Чеклист для поваров</title>
+  <title>Чеклист для кухни</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <div class="container">
 
     <!-- Переключение языка -->
@@ -16,35 +15,34 @@
     </div>
 
     <!-- Дата -->
-    <div class="check-item row no-translate">
-  <label class="check-label" data-ru="Дата" data-en="Date">Дата</label>
-  <div class="date-group">
-    <select name="day">
-      <option disabled selected>ДД</option>
-      <!-- 01–31 -->
-      <option>01</option><option>02</option><option>03</option><option>04</option>
-      <option>05</option><option>06</option><option>07</option><option>08</option>
-      <option>09</option><option>10</option><option>11</option><option>12</option>
-      <option>13</option><option>14</option><option>15</option><option>16</option>
-      <option>17</option><option>18</option><option>19</option><option>20</option>
-      <option>21</option><option>22</option><option>23</option><option>24</option>
-      <option>25</option><option>26</option><option>27</option><option>28</option>
-      <option>29</option><option>30</option><option>31</option>
-    </select>
-    <select name="month">
-      <option disabled selected>MM</option>
-      <option>01</option><option>02</option><option>03</option>
-      <option>04</option><option>05</option><option>06</option>
-      <option>07</option><option>08</option><option>09</option>
-      <option>10</option><option>11</option><option>12</option>
-    </select>
-  </div>
-</div>
+    <div class="dish">
+      <label class="check-label" data-ru="Дата" data-en="Date">Дата</label>
+      <div class="date-group">
+        <select name="day">
+          <option>ДД</option>
+          <option>01</option><option>02</option><option>03</option><option>04</option>
+          <option>05</option><option>06</option><option>07</option><option>08</option>
+          <option>09</option><option>10</option><option>11</option><option>12</option>
+          <option>13</option><option>14</option><option>15</option><option>16</option>
+          <option>17</option><option>18</option><option>19</option><option>20</option>
+          <option>21</option><option>22</option><option>23</option><option>24</option>
+          <option>25</option><option>26</option><option>27</option><option>28</option>
+          <option>29</option><option>30</option><option>31</option>
+        </select>
+        <select name="month">
+          <option>MM</option>
+          <option>01</option><option>02</option><option>03</option>
+          <option>04</option><option>05</option><option>06</option>
+          <option>07</option><option>08</option><option>09</option>
+          <option>10</option><option>11</option><option>12</option>
+        </select>
+      </div>
+    </div>
 
     <!-- Имя -->
-    <div class="check-item row">
+    <div class="dish">
       <label class="check-label" data-ru="Имя" data-en="Name">Имя</label>
-      <select name="chef" data-label-ru="Имя" data-label-en="Name">
+      <select name="chef" class="qty" data-label-ru="Имя" data-label-en="Name">
         <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
         <option value="maxim" data-ru="Максим" data-en="Maksim">Максим</option>
         <option value="bakha" data-ru="Баха" data-en="Bakha">Баха</option>
@@ -52,47 +50,30 @@
       </select>
     </div>
 
-    <div class="section-title" data-ru="Рабочая зона" data-en="Working zone">Рабочая зона</div>
+    <!-- Раздел: Оборудование -->
+    <div class="menu-section">
+      <div class="section-title" data-ru="Оборудование" data-en="Equipment">Оборудование</div>
 
-<div class="check-item row">
-  <label class="check-label" data-ru="Сахарная пудра" data-en="Powdered sugar">Сахарная пудра</label>
-  <select name="powdered_sugar" data-label-ru="Сахарная пудра" data-label-en="Powdered sugar">
-    <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
-    <option value="есть" data-ru="Есть" data-en="Have">Есть</option>
-    <option value="мало" data-ru="Мало" data-en="Few">Мало</option>
-    <option value="принести" data-ru="Принести / Заказать" data-en="To bring / To order">Принести / Заказать</option>
-  </select>
-</div>
+      <div class="dish">
+        <label class="check-label" data-ru="Болитор" data-en="Bolitor">Болитор</label>
+        <select name="bolitor" class="qty" data-label-ru="Болитор" data-label-en="Bolitor">
+          <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
+          <option value="washed" data-ru="Помыто" data-en="Washed">Помыто</option>
+          <option value="messed" data-ru="Проебал" data-en="Messed up">Проебал</option>
+        </select>
+      </div>
 
-<div class="check-item row">
-  <label class="check-label" data-ru="Мюсли" data-en="Muesli">Мюсли</label>
-  <select name="muesli" data-label-ru="Мюсли" data-label-en="Muesli">
-    <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
-    <option value="есть" data-ru="Есть" data-en="Have">Есть</option>
-    <option value="мало" data-ru="Мало" data-en="Few">Мало</option>
-    <option value="принести" data-ru="Принести / Заказать" data-en="To bring / To order">Принести / Заказать</option>
-  </select>
-</div>
+      <div class="dish">
+        <label class="check-label" data-ru="Плита" data-en="Stove">Плита</label>
+        <select name="stove" class="qty" data-label-ru="Плита" data-label-en="Stove">
+          <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
+          <option value="washed" data-ru="Помыто" data-en="Washed">Помыто</option>
+          <option value="messed" data-ru="Проебал" data-en="Messed up">Проебал</option>
+        </select>
+      </div>
+    </div>
 
-<div class="check-item row">
-  <label class="check-label" data-ru="Кокосовые чипсы" data-en="Coconut chips">Кокосовые чипсы</label>
-  <select name="coconut_chips" data-label-ru="Кокосовые чипсы" data-label-en="Coconut chips">
-    <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
-    <option value="есть" data-ru="Есть" data-en="Have">Есть</option>
-    <option value="мало" data-ru="Мало" data-en="Few">Мало</option>
-    <option value="принести" data-ru="Принести / Заказать" data-en="To bring / To order">Принести / Заказать</option>
-  </select>
-</div>
-
-<div class="check-item row">
-  <label class="check-label" data-ru="Мёд" data-en="Honey">Мёд</label>
-  <select name="honey" data-label-ru="Мёд" data-label-en="Honey">
-    <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
-    <option value="есть" data-ru="Есть" data-en="Have">Есть</option>
-    <option value="мало" data-ru="Мало" data-en="Few">Мало</option>
-    <option value="принести" data-ru="Принести / Заказать" data-en="To bring / To order">Принести / Заказать</option>
-  </select>
-</div>
+    <!-- Следующий раздел вставим потом -->
 
   </div>
 
@@ -104,13 +85,12 @@
       document.querySelectorAll('.section-title').forEach(title => {
         title.textContent = title.dataset[lang];
       });
-      document.querySelectorAll('select:not(.no-translate)').forEach(select => {
+      document.querySelectorAll('select').forEach(select => {
         Array.from(select.options).forEach(opt => {
           if (opt.dataset[lang]) opt.textContent = opt.dataset[lang];
         });
       });
     }
   </script>
-
 </body>
 </html>
