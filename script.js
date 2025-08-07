@@ -1,3 +1,21 @@
+// === Переключение языка ===
+function switchLanguage(lang) {
+  document.querySelectorAll('.check-label').forEach(label => {
+    label.textContent = label.dataset[lang];
+  });
+  document.querySelectorAll('.section-title').forEach(title => {
+    title.textContent = title.dataset[lang];
+  });
+  document.querySelectorAll('select').forEach(select => {
+    Array.from(select.options).forEach(opt => {
+      if (opt.dataset[lang]) {
+        opt.textContent = opt.dataset[lang];
+      }
+    });
+  });
+}
+
+// === Отправка в Telegram ===
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form') || document.body;
   const button = document.createElement('button');
@@ -5,6 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
   button.style.marginTop = '30px';
   button.style.padding = '12px 20px';
   button.style.fontSize = '18px';
+  button.style.borderRadius = '8px';
+  button.style.background = '#333';
+  button.style.color = '#fff';
+  button.style.border = 'none';
+  button.style.cursor = 'pointer';
+
   form.appendChild(button);
 
   button.addEventListener('click', () => {
