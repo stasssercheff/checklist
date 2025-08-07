@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === Отправка в Telegram ===
     const token = '8348920386:AAFlufZWkWqsH4-qoqSSHdmgcEM_s46Ke8Q';
-    const chat_id = '-1002393080811';
+    const chat_id = '-1002797609238';
 
     fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
