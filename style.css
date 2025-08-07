@@ -1,103 +1,83 @@
-/* === Общие стили и фон === */
 html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   font-family: Arial, sans-serif;
-  background: #f0f0f0;
-  font-size: 22px; /* увеличенный шрифт по умолчанию */
-}
-
-/* === Контейнер чеклиста === */
-.wrapper {
-  padding: 24px 12px;
-  min-height: 100vh;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
+  background: #f5f5f5;
+  font-size: 20px;
 }
 
 .container {
-  width: 100%;
-  max-width: 900px; /* Шире основной блок */
+  max-width: 95vw;
+  margin: 20px auto;
   background: #fff;
-  padding: 28px;
-  border-radius: 14px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
-/* === Переключение языка === */
 .lang-switch {
   display: flex;
-  width: 100%;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .lang-switch button {
-  flex: 1;
-  padding: 18px;
-  font-size: 24px;
-  border: 1px solid #ccc;
-  background: #f7f7f7;
-  cursor: pointer;
+  width: 50%;
+  padding: 16px;
+  font-size: 22px;
+  font-weight: bold;
+  border: none;
   border-radius: 8px;
+  background: #444;
+  color: #fff;
+  cursor: pointer;
 }
 
-.lang-switch button:first-child {
-  margin-right: 8px;
+.lang-switch button + button {
+  margin-left: 8px;
 }
+
 .lang-switch button:hover {
-  background: #ddd;
-}
-
-/* === Секции чеклиста === */
-.menu-section {
-  margin: 32px 0;
-  padding: 24px;
-  background: #f3f1ed;
-  border-radius: 12px;
+  background: #000;
 }
 
 .section-title {
   background: #e1ded9;
-  padding: 12px 18px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 26px;
-  margin-bottom: 20px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 22px;
   text-align: center;
+  margin-top: 24px;
+  margin-bottom: 14px;
 }
 
-/* === Блок пункта === */
 .dish {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  margin-bottom: 14px;
+  font-size: 20px;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 20px;
-  font-size: 22px;
 }
 
-/* === Названия пунктов === */
-.dish label,
 .check-label {
-  flex: 1 1 65%;
-  font-weight: 500;
-  word-break: break-word;
-  line-height: 1.4;
+  flex: 1 1 60%;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 6px;
 }
 
-/* === Селекторы === */
 .dish select.qty {
-  flex: 0 0 200px;
-  padding: 14px;
-  font-size: 22px;
-  height: 56px;
+  flex: 1 1 35%;
+  min-width: 130px;
+  max-width: 180px;
+  font-size: 20px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background: #fff;
-  text-align: center;
+  color: #000;
   text-align-last: center;
 }
 
@@ -105,80 +85,46 @@ html, body {
   text-align: center;
 }
 
-/* === Поля даты === */
+textarea.comment {
+  width: 100%;
+  padding: 14px;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 100px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 20px;
+}
+
 .date-group {
   display: flex;
-  gap: 16px;
-  width: 100%;
+  gap: 10px;
+  margin-top: 6px;
 }
 
 .date-group select {
   flex: 1;
-  padding: 14px;
-  font-size: 22px;
+  padding: 12px;
+  font-size: 20px;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #fff;
-  height: 56px;
-  text-align: center;
-  text-align-last: center;
+  min-width: 120px;
 }
 
-/* === Поля ввода текста и комментариев === */
-textarea,
-input[type="text"],
-input:not([type="submit"]):not([type="number"]) {
-  width: 100%;
-  padding: 16px;
-  font-size: 22px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
-  resize: vertical;
-  min-height: 90px;
-}
-
-/* === Кнопка отправки === */
-button.send-button,
 #sendToTelegram {
   width: 100%;
-  background: #333;
-  color: #fff;
-  padding: 22px;
-  font-size: 24px;
+  background: #444;
+  color: white;
+  font-size: 22px;
+  padding: 16px;
   border: none;
   border-radius: 10px;
-  margin-top: 30px;
   cursor: pointer;
+  margin-top: 30px;
 }
 
-button.send-button:hover,
 #sendToTelegram:hover {
-  background: #111;
-}
-
-/* === Мобильная адаптация === */
-@media screen and (max-width: 600px) {
-  .dish {
-    flex-direction: column;
-  }
-
-  .dish label,
-  .check-label {
-    padding-right: 0;
-  }
-
-  .dish select.qty,
-  .date-group select {
-    width: 100%;
-  }
-
-  .lang-switch {
-    flex-direction: column;
-  }
-
-  .lang-switch button:first-child {
-    margin-right: 0;
-    margin-bottom: 8px;
-  }
+  background: #000;
 }
