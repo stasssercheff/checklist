@@ -79,7 +79,7 @@ select {
   justify-content: space-between;
   align-items: center;
   margin: 12px 0;
-  font-size: 30px;
+  font-size: 38px;
   flex-wrap: wrap;
 }
 
@@ -100,7 +100,7 @@ select {
 
 .dish select.qty option {
   text-align: center;
-  font-size: 38px;
+  font-size: 30px;
 }
 
 textarea.comment {
