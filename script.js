@@ -19,7 +19,7 @@ function switchLanguage(lang) {
     });
   });
 
-  // Обновить пустые опции
+  // Обновить текст пустых опций
   document.querySelectorAll('select.qty').forEach(select => {
     const emptyOption = select.querySelector('option[value=""]');
     if (emptyOption) {
@@ -32,7 +32,7 @@ function switchLanguage(lang) {
 document.addEventListener('DOMContentLoaded', () => {
   const lang = document.documentElement.lang || 'ru';
 
-  // Вставка пустой опции в каждый select.qty, если её нет
+  // === Вставка пустых опций ===
   document.querySelectorAll('select.qty').forEach(select => {
     const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
     if (!hasEmpty) {
@@ -45,10 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Применить язык после вставки опций
+  // === Применение языка после вставки опций ===
   switchLanguage(lang);
 
-  // === Вставка текущей даты ===
+  // === Установка текущей даты ===
   const today = new Date();
   const day = String(today.getDate()).padStart(2, '0');
   const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       message += `\n`;
     });
 
-    // Отправка
+    // === Отправка в Telegram ===
     const token = '8348920386:AAFlufZWkWqsH4-qoqSSHdmgcEM_s46Ke8Q';
     const chat_id = '-1002393080811';
 
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
       if (data.ok) {
         alert('✅ Чеклист отправлен!');
-        // Очистка localStorage можно вставить тут
+        localStorage.clear(); // ← сброс ТОЛЬКО при успешной отправке
       } else {
         alert('❌ Ошибка при отправке в Telegram');
       }
