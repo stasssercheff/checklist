@@ -9,14 +9,14 @@ function switchLanguage(lang) {
     }
   });
 
-  // Метки (label)
+  // Метки
   document.querySelectorAll('.check-label').forEach(label => {
     if (label.dataset[lang]) {
       label.textContent = label.dataset[lang];
     }
   });
 
-  // Опции в селекторах
+  // Опции селекторов
   document.querySelectorAll('select').forEach(select => {
     Array.from(select.options).forEach(option => {
       if (option.dataset[lang]) {
@@ -24,79 +24,114 @@ function switchLanguage(lang) {
       }
     });
   });
+
+  // Обновить текст пустых опций
+  document.querySelectorAll('select.qty').forEach(select => {
+    const emptyOption = select.querySelector('option[value=""]');
+    if (emptyOption) {
+      emptyOption.textContent = lang === 'en' ? '— Select —' : '— Выбрать —';
+    }
+  });
 }
 
-// === После загрузки документа ===
+// === DOMContentLoaded ===
 document.addEventListener('DOMContentLoaded', () => {
-  // === Принудительно вставляем пустую опцию в каждый select.qty
-  document.querySelectorAll('select.qty').forEach(select => {
-    const hasEmptyOption = Array.from(select.options).some(opt => opt.value === '');
+  const lang = document.documentElement.lang || 'ru';
 
-    if (!hasEmptyOption) {
+  // Вставка пустой опции во все select.qty
+  document.querySelectorAll('select.qty').forEach(select => {
+    const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
+    if (!hasEmpty) {
       const emptyOption = document.createElement('option');
       emptyOption.value = '';
-      emptyOption.dataset.ru = '— Выбрать —';
-      emptyOption.dataset.en = '— Select —';
-      emptyOption.textContent = document.documentElement.lang === 'en' ? '— Select —' : '— Выбрать —';
+      emptyOption.dataset.ru = '— Не выбрано —';
+      emptyOption.dataset.en = '— Not selected —';
+      emptyOption.textContent = lang === 'en' ? '— Not selected —' : '— Не выбрано —';
       select.insertBefore(emptyOption, select.firstChild);
-
-      // Принудительно выбрать пустую опцию как активную
-      select.selectedIndex = 0;
     }
   });
 
-  // Применяем язык ко всем элементам при загрузке
-  const currentLang = document.documentElement.lang || 'ru';
-  switchLanguage(currentLang);
+  // Применить язык после добавления опций
+  switchLanguage(lang);
 
-  // === Обработчик кнопки отправки в Telegram ===
-  const tgButton = document.getElementById('sendToTelegram');
-  if (tgButton) {
-    tgButton.addEventListener('click', () => {
-      const selects = document.querySelectorAll('select.qty');
-      const lang = document.documentElement.lang || 'ru';
+  // Обработка кнопки
+  const button = document.getElementById('sendToTelegram');
+  button.addEventListener('click', () => {
+    const lang = document.documentElement.lang || 'ru';
+    let message = `🧾 <b>Чеклист</b>\n\n`;
 
-      let message = `🧾 <b>Чеклист</b>\n\n`;
+    // === Дата ===
+    const day = document.querySelector('select[name="day"]')?.value || '—';
+    const month = document.querySelector('select[name="month"]')?.value || '—';
+    const dateLine = lang === 'en' ? `📅 Date: ${day}/${month}` : `📅 Дата: ${day}/${month}`;
+    message += `${dateLine}\n`;
 
-      selects.forEach(select => {
-        const selected = select.options[select.selectedIndex];
-        if (!selected || selected.value === '') return;
+    // === Имя ===
+    const nameSelect = document.querySelector('select[name="chef"]');
+    const selectedChef = nameSelect?.options[nameSelect.selectedIndex];
+    const nameLine = lang === 'en' 
+      ? `👨‍🍳 Name: ${(selectedChef?.dataset.en || '— Not selected —')}`
+      : `👨‍🍳 Имя: ${(selectedChef?.dataset.ru || '— Не выбрано —')}`;
+    message += `${nameLine}\n\n`;
 
-        const labelRU = select.dataset.labelRu;
-        const labelEN = select.dataset.labelEn;
+    // === Все разделы ===
+    document.querySelectorAll('.menu-section').forEach(section => {
+      const sectionTitle = section.querySelector('.section-title');
+      const title = sectionTitle?.dataset[lang] || sectionTitle?.textContent || '';
 
-        const valueRU = selected.dataset.ru || selected.textContent;
-        const valueEN = selected.dataset.en || selected.textContent;
+      message += `🔸 <b>${title}</b>\n`;
 
-        if (labelRU && labelEN) {
+      // Все .dish внутри
+      const dishBlocks = section.querySelectorAll('.dish');
+      dishBlocks.forEach(dish => {
+        const select = dish.querySelector('select.qty');
+        const label = dish.querySelector('label.check-label');
+
+        if (select && label) {
+          const labelRU = select.dataset.labelRu || label.dataset.ru || '';
+          const labelEN = select.dataset.labelEn || label.dataset.en || '';
+          const selectedOption = select.options[select.selectedIndex];
+
+          const valueRU = selectedOption?.dataset.ru || '— Не выбрано —';
+          const valueEN = selectedOption?.dataset.en || '— Not selected —';
+
           message += `• ${labelRU} / ${labelEN}: ${valueRU} / ${valueEN}\n`;
         }
       });
 
-      const token = '8348920386:AAFlufZWkWqsH4-qoqSSHdmgcEM_s46Ke8Q';
-      const chat_id = '-1002393080811';
+      // === Комментарий ===
+      const comment = section.nextElementSibling?.querySelector('textarea.comment');
+      if (comment && comment.value.trim()) {
+        message += `💬 ${lang === 'en' ? 'Comment' : 'Комментарий'}: ${comment.value.trim()}\n`;
+      }
 
-      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chat_id,
-          text: message,
-          parse_mode: 'HTML'
-        })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.ok) {
-            alert('✅ Чеклист отправлен!');
-          } else {
-            alert('❌ Ошибка при отправке в Telegram');
-          }
-        })
-        .catch(err => {
-          alert('❌ Ошибка подключения к Telegram');
-          console.error(err);
-        });
+      message += `\n`;
     });
-  }
+
+    // === Отправка в Telegram ===
+    const token = '8348920386:AAFlufZWkWqsH4-qoqSSHdmgcEM_s46Ke8Q';
+    const chat_id = '-1002393080811';
+
+    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id,
+        text: message,
+        parse_mode: 'HTML'
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) {
+        alert('✅ Чеклист отправлен!');
+      } else {
+        alert('❌ Ошибка при отправке в Telegram');
+      }
+    })
+    .catch(err => {
+      alert('❌ Ошибка подключения к Telegram');
+      console.error(err);
+    });
+  });
 });
