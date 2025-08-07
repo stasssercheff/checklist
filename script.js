@@ -1,3 +1,5 @@
+Вот жс:
+
 // === Переключение языка ===
 function switchLanguage(lang) {
   document.documentElement.lang = lang;
@@ -19,7 +21,7 @@ function switchLanguage(lang) {
     });
   });
 
-  // Обновить текст пустых опций
+  // Обновить пустые опции
   document.querySelectorAll('select.qty').forEach(select => {
     const emptyOption = select.querySelector('option[value=""]');
     if (emptyOption) {
@@ -32,7 +34,7 @@ function switchLanguage(lang) {
 document.addEventListener('DOMContentLoaded', () => {
   const lang = document.documentElement.lang || 'ru';
 
-  // === Вставка пустых опций ===
+  // Вставка пустой опции в каждый select.qty, если её нет
   document.querySelectorAll('select.qty').forEach(select => {
     const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
     if (!hasEmpty) {
@@ -45,10 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // === Применение языка после вставки опций ===
+  // Применить язык после вставки опций
   switchLanguage(lang);
 
-  // === Установка текущей даты ===
+  // === Вставка текущей даты ===
   const today = new Date();
   const day = String(today.getDate()).padStart(2, '0');
   const month = String(today.getMonth() + 1).padStart(2, '0');
