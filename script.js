@@ -14,12 +14,22 @@ function switchLanguage(lang) {
     if (label.dataset[lang]) label.textContent = label.dataset[lang];
   });
 
-  // Опции селекторов
-  document.querySelectorAll('select').forEach(select => {
-    Array.from(select.options).forEach(option => {
-      if (option.dataset[lang]) option.textContent = option.dataset[lang];
-    });
-  });
+  // === Вставка пустой опции в каждый select.qty ===
+document.querySelectorAll('select.qty').forEach(select => {
+  const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
+  if (!hasEmpty) {
+    const emptyOption = document.createElement('option');
+    emptyOption.value = '';
+    emptyOption.dataset.ru = '— Не выбрано —';
+    emptyOption.dataset.en = '— Not selected —';
+    emptyOption.textContent = lang === 'en' ? '— Not selected —' : '— Не выбрано —';
+    emptyOption.selected = true; // <<< чтобы отображалось по умолчанию
+    select.insertBefore(emptyOption, select.firstChild);
+  } else {
+    // Если есть, принудительно делаем её выбранной по умолчанию
+    select.value = '';
+  }
+});
 
   // Обновить пустые опции
   document.querySelectorAll('select.qty').forEach(select => {
