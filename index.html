@@ -872,20 +872,6 @@
   </div>
 </div>
 
-  <script>
-    function switchLanguage(lang) {
-      document.querySelectorAll('.check-label').forEach(label => {
-        label.textContent = label.dataset[lang];
-      });
-      document.querySelectorAll('.section-title').forEach(title => {
-        title.textContent = title.dataset[lang];
-      });
-      document.querySelectorAll('select').forEach(select => {
-        Array.from(select.options).forEach(opt => {
-          if (opt.dataset[lang]) opt.textContent = opt.dataset[lang];
-        });
-      });
-    }
-  </script>
+<script src="checklist.js"></script>
 </body>
 </html>
