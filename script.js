@@ -28,26 +28,28 @@ function switchLanguage(lang) {
 
 // === После загрузки документа ===
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('form') || document.body;
-
-  // === Добавление пустой опции в каждый селектор .qty ===
+  // === Принудительно вставляем пустую опцию в каждый select.qty
   document.querySelectorAll('select.qty').forEach(select => {
-    const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
-    if (!hasEmpty) {
+    const hasEmptyOption = Array.from(select.options).some(opt => opt.value === '');
+
+    if (!hasEmptyOption) {
       const emptyOption = document.createElement('option');
       emptyOption.value = '';
       emptyOption.dataset.ru = '— Выбрать —';
       emptyOption.dataset.en = '— Select —';
       emptyOption.textContent = document.documentElement.lang === 'en' ? '— Select —' : '— Выбрать —';
       select.insertBefore(emptyOption, select.firstChild);
+
+      // Принудительно выбрать пустую опцию как активную
+      select.selectedIndex = 0;
     }
   });
 
-  // === Обновить текст опций после вставки пустых
+  // Применяем язык ко всем элементам при загрузке
   const currentLang = document.documentElement.lang || 'ru';
   switchLanguage(currentLang);
 
-  // === Обработчик кнопки Telegram ===
+  // === Обработчик кнопки отправки в Telegram ===
   const tgButton = document.getElementById('sendToTelegram');
   if (tgButton) {
     tgButton.addEventListener('click', () => {
@@ -83,18 +85,18 @@ document.addEventListener('DOMContentLoaded', () => {
           parse_mode: 'HTML'
         })
       })
-      .then(res => res.json())
-      .then(data => {
-        if (data.ok) {
-          alert('✅ Чеклист отправлен!');
-        } else {
-          alert('❌ Ошибка при отправке в Telegram');
-        }
-      })
-      .catch(err => {
-        alert('❌ Ошибка подключения к Telegram');
-        console.error(err);
-      });
+        .then(res => res.json())
+        .then(data => {
+          if (data.ok) {
+            alert('✅ Чеклист отправлен!');
+          } else {
+            alert('❌ Ошибка при отправке в Telegram');
+          }
+        })
+        .catch(err => {
+          alert('❌ Ошибка подключения к Telegram');
+          console.error(err);
+        });
     });
   }
 });
