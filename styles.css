@@ -78,7 +78,9 @@ html, body {
 .dish {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
   margin: 12px 0;
   padding: 10px 14px;
   background: #f9f9f9;
@@ -88,25 +90,25 @@ html, body {
 
 .dish label,
 .check-label {
-  font-size: 17px;
+  flex: 1 1 65%;
+  word-break: break-word;
   font-weight: 500;
-  flex: 1;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 0;
   padding-right: 10px;
-  line-height: 1.3;
 }
 
-/* ===== Селекторы ===== */
 .dish select.qty {
-  flex-shrink: 0;
-  width: 140px;
-  min-width: 140px;
+  flex: 0 0 120px;
   padding: 10px 12px;
-  font-size: 17px;
-  border-radius: 8px;
+  font-size: 16px;
   border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
   text-align: center;
   text-align-last: center;
-  background: #fff;
 }
 
 .dish select.qty option {
