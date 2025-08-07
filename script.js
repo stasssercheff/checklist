@@ -14,7 +14,7 @@ function switchLanguage(lang) {
     }
   });
 
-  // Меняем язык у опций в селекторах
+  // Меняем язык у всех опций в селектах
   document.querySelectorAll('select').forEach(select => {
     Array.from(select.options).forEach(opt => {
       if (opt.dataset[lang]) {
@@ -28,6 +28,7 @@ function switchLanguage(lang) {
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form') || document.body;
 
+  // === Кнопка отправки ===
   const button = document.createElement('button');
   button.textContent = 'Отправить в Telegram';
   button.className = 'send-button';
@@ -41,8 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     selects.forEach(select => {
       const selected = select.options[select.selectedIndex];
-
-      // Пропускаем, если ничего не выбрано
       if (!selected || selected.value === '') return;
 
       const labelRU = select.dataset.labelRu;
@@ -80,5 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('❌ Ошибка подключения к Telegram');
       console.error(err);
     });
+  });
+
+  // === Вставка пустой опции в каждый селектор (если нет) ===
+  document.querySelectorAll('select.qty').forEach(select => {
+    const exists = Array.from(select.options).some(opt => opt.value === '');
+    if (!exists) {
+      const emptyOption = document.createElement('option');
+      emptyOption.value = '';
+      emptyOption.dataset.ru = '— Выбрать —';
+      emptyOption.dataset.en = '— Select —';
+      emptyOption.textContent = '— Выбрать —';
+      select.insertBefore(emptyOption, select.firstChild);
+    }
   });
 });
