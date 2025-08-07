@@ -1,15 +1,18 @@
 /* ===== Общий фон и контейнер ===== */
-html, body {
+html {
+  font-size: clamp(16px, 2.2vw, 22px); /* масштабируемый шрифт */
+}
+
+body {
   margin: 0;
   padding: 0;
   background: #eaeaea;
   font-family: Arial, sans-serif;
-  font-size: 20px; /* увеличен шрифт */
   overflow-x: hidden;
 }
 
 .wrapper {
-  padding: 24px;
+  padding: 2.5vw;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;
@@ -21,7 +24,7 @@ html, body {
   width: 100%;
   max-width: 750px;
   background: #fff;
-  padding: 24px;
+  padding: 2.5vw;
   border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
@@ -30,13 +33,13 @@ html, body {
 .lang-switch {
   display: flex;
   justify-content: center;
-  gap: 18px;
-  margin-bottom: 30px;
+  gap: 2vw;
+  margin-bottom: 2.5vw;
 }
 
 .lang-switch button {
-  padding: 12px 24px;
-  font-size: 20px;
+  padding: 1em 1.5em;
+  font-size: 1rem;
   border-radius: 10px;
   border: 1px solid #ccc;
   background: #f5f5f5;
@@ -49,19 +52,19 @@ html, body {
 
 /* ===== Секции чеклиста ===== */
 .menu-section {
-  margin: 30px 0;
-  padding: 18px;
+  margin: 3vw 0;
+  padding: 2vw;
   background: #f3f1ed;
   border-radius: 12px;
 }
 
 .section-title {
   background: #e1ded9;
-  padding: 10px 14px;
+  padding: 0.8em 1em;
   border-radius: 8px;
   font-weight: 700;
-  font-size: 22px;
-  margin-bottom: 16px;
+  font-size: 1.2rem;
+  margin-bottom: 1em;
   text-align: center;
 }
 
@@ -71,12 +74,12 @@ html, body {
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 16px 0;
-  padding: 12px 16px;
+  gap: 1em;
+  margin: 1em 0;
+  padding: 1em;
   background: #f9f9f9;
   border-radius: 8px;
-  font-size: 20px;
+  font-size: 1rem;
 }
 
 .dish label,
@@ -84,7 +87,7 @@ html, body {
   flex: 1 1 65%;
   word-break: break-word;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 1rem;
   line-height: 1.4;
   margin: 0;
   padding-right: 10px;
@@ -92,10 +95,10 @@ html, body {
 
 /* ===== Селекторы ===== */
 .dish select.qty {
-  flex: 0 0 160px;
-  padding: 12px 14px;
-  font-size: 20px;
-  height: 52px;
+  flex: 0 0 150px;
+  padding: 0.8em 1em;
+  font-size: 1rem;
+  height: auto;
   border: 1px solid #ccc;
   border-radius: 8px;
   background: #fff;
@@ -111,18 +114,18 @@ html, body {
 /* ===== Специально для блока даты ===== */
 .date-group {
   display: flex;
-  gap: 14px;
+  gap: 1em;
   width: 100%;
 }
 
 .date-group select {
   flex: 1;
-  padding: 12px 14px;
-  font-size: 20px;
+  padding: 0.8em 1em;
+  font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   background: #fff;
-  height: 52px;
+  height: auto;
   text-align: center;
   text-align-last: center;
 }
@@ -132,8 +135,8 @@ input[type="text"],
 textarea,
 input:not([type="number"]):not([type="submit"]) {
   width: 100%;
-  padding: 14px;
-  font-size: 20px;
+  padding: 1em;
+  font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box;
@@ -151,11 +154,11 @@ button.send-button,
   background: #555;
   color: #fff;
   border: none;
-  padding: 20px;
-  font-size: 22px;
+  padding: 1em;
+  font-size: 1.1rem;
   border-radius: 10px;
   cursor: pointer;
-  margin-top: 30px;
+  margin-top: 2em;
 }
 
 button.send-button:hover,
@@ -179,7 +182,7 @@ button.send-button:hover,
 
 .popup-content {
   background: #fff;
-  padding: 24px;
+  padding: 2em;
   border-radius: 12px;
   max-width: 90%;
   text-align: center;
@@ -188,9 +191,9 @@ button.send-button:hover,
 .popup-content pre {
   white-space: pre-line;
   text-align: left;
-  font-size: 18px;
+  font-size: 1rem;
   line-height: 1.5;
-  margin: 16px 0;
+  margin: 1em 0;
 }
 
 /* ===== Мобильная адаптация ===== */
@@ -203,17 +206,17 @@ button.send-button:hover,
   .dish label,
   .check-label {
     padding-right: 0;
-    margin-bottom: 8px;
+    margin-bottom: 0.5em;
   }
 
   .dish select.qty {
     width: 100%;
-    margin-top: 6px;
+    margin-top: 0.5em;
   }
 
   .date-group {
     flex-direction: column;
-    gap: 10px;
+    gap: 0.8em;
   }
 
   .lang-switch {
