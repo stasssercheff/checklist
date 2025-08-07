@@ -1,5 +1,7 @@
 // === Переключение языка ===
 function switchLanguage(lang) {
+  document.documentElement.lang = lang;
+
   // Заголовки
   document.querySelectorAll('.section-title').forEach(title => {
     if (title.dataset[lang]) {
@@ -34,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   button.className = 'send-button';
   form.appendChild(button);
 
-  // === Добавление пустой опции в каждый селектор qty ===
+  // === Добавление пустой опции в каждый селектор qty (если нет) ===
   document.querySelectorAll('select.qty').forEach(select => {
     const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
     if (!hasEmpty) {
@@ -93,4 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error(err);
     });
   });
+
+  // === Автоматическая установка текущего языка при загрузке ===
+  switchLanguage(document.documentElement.lang || 'ru');
 });
