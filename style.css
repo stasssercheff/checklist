@@ -67,11 +67,10 @@ html, body {
 
 .dish {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 12px 0;
-  font-size: 20px;
-  flex-wrap: wrap;
+  flex-direction: column;         /* Элементы идут сверху вниз */
+  align-items: flex-start;        /* Выравнивание по левому краю */
+  margin: 16px 0;                 /* Просторнее */
+  font-size: 22px;                /* Крупный шрифт */
 }
 
 .check-label {
