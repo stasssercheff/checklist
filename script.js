@@ -1,5 +1,3 @@
-Вот жс:
-
 // === Переключение языка ===
 function switchLanguage(lang) {
   document.documentElement.lang = lang;
@@ -14,22 +12,12 @@ function switchLanguage(lang) {
     if (label.dataset[lang]) label.textContent = label.dataset[lang];
   });
 
-  // === Вставка пустой опции в каждый select.qty ===
-document.querySelectorAll('select.qty').forEach(select => {
-  const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
-  if (!hasEmpty) {
-    const emptyOption = document.createElement('option');
-    emptyOption.value = '';
-    emptyOption.dataset.ru = '— Не выбрано —';
-    emptyOption.dataset.en = '— Not selected —';
-    emptyOption.textContent = lang === 'en' ? '— Not selected —' : '— Не выбрано —';
-    emptyOption.selected = true; // <<< чтобы отображалось по умолчанию
-    select.insertBefore(emptyOption, select.firstChild);
-  } else {
-    // Если есть, принудительно делаем её выбранной по умолчанию
-    select.value = '';
-  }
-});
+  // Опции селекторов
+  document.querySelectorAll('select').forEach(select => {
+    Array.from(select.options).forEach(option => {
+      if (option.dataset[lang]) option.textContent = option.dataset[lang];
+    });
+  });
 
   // Обновить пустые опции
   document.querySelectorAll('select.qty').forEach(select => {
@@ -53,7 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
       emptyOption.dataset.ru = '— Не выбрано —';
       emptyOption.dataset.en = '— Not selected —';
       emptyOption.textContent = lang === 'en' ? '— Not selected —' : '— Не выбрано —';
+      emptyOption.selected = true;
       select.insertBefore(emptyOption, select.firstChild);
+    } else {
+      select.value = '';
     }
   });
 
@@ -130,34 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // === Отправка в Telegram ===
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('form') || document.body;
-  const button = document.createElement('button');
-  button.textContent = 'Отправить в Telegram';
-  button.style.marginTop = '30px';
-  button.style.padding = '12px 20px';
-  button.style.fontSize = '18px';
-  form.appendChild(button);
-
-  button.addEventListener('click', () => {
-    const selects = document.querySelectorAll('select');
-    const lang = document.documentElement.lang || 'ru';
-
-    let message = `🧾 <b>Чеклист</b>\n\n`;
-
-    selects.forEach(select => {
-      const labelRU = select.dataset.labelRu;
-      const labelEN = select.dataset.labelEn;
-      const selected = select.options[select.selectedIndex];
-
-      const valueRU = selected.dataset.ru || selected.textContent;
-      const valueEN = selected.dataset.en || selected.textContent;
-
-      if (labelRU && labelEN) {
-        message += `• ${labelRU} / ${labelEN}: ${valueRU} / ${valueEN}\n`;
-      }
-    });
-
     const token = '8348920386:AAFlufZWkWqsH4-qoqSSHdmgcEM_s46Ke8Q';
     const chat_id = '-1002393080811';
 
@@ -165,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        chat_id: chat_id,
+        chat_id,
         text: message,
         parse_mode: 'HTML'
       })
@@ -174,6 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
       if (data.ok) {
         alert('✅ Чеклист отправлен!');
+        // Очистка localStorage можно добавить здесь при необходимости
+        // localStorage.clear();
       } else {
         alert('❌ Ошибка при отправке в Telegram');
       }
