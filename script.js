@@ -135,14 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(res => res.json())
     .then(data => {
-      if (data.ok) {
-        alert('✅ Чеклист отправлен!');
-        // Очистка localStorage можно добавить здесь при необходимости
-        // localStorage.clear();
-      } else {
-        alert('❌ Ошибка при отправке в Telegram');
-      }
-    })
+  if (data.ok) {
+    alert('✅ Чеклист отправлен!');
+  } else {
+    alert('❌ Ошибка при отправке:\n' + JSON.stringify(data, null, 2));
+  }
+})
     .catch(err => {
       alert('❌ Ошибка подключения к Telegram');
       console.error(err);
