@@ -1,7 +1,5 @@
 // === Переключение языка ===
 function switchLanguage(lang) {
-  document.documentElement.lang = lang;
-
   // Заголовки
   document.querySelectorAll('.section-title').forEach(title => {
     if (title.dataset[lang]) {
@@ -24,19 +22,18 @@ function switchLanguage(lang) {
       }
     });
   });
+
+  // Переключаем язык у всех пустых опций
+  document.querySelectorAll('select.qty option[value=""]').forEach(option => {
+    option.textContent = lang === 'en' ? '— Select —' : '— Выбрать —';
+  });
+
+  // Сохраняем текущий язык в <html lang="">
+  document.documentElement.lang = lang;
 }
 
-// === После загрузки документа ===
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('form') || document.body;
-
-  // === Добавление кнопки отправки ===
-  const button = document.createElement('button');
-  button.textContent = 'Отправить в Telegram';
-  button.className = 'send-button';
-  form.appendChild(button);
-
-  // === Добавление пустой опции в каждый селектор qty (если нет) ===
+// === Добавление пустой опции в каждый .qty ===
+function ensureEmptyOptionInAllSelects() {
   document.querySelectorAll('select.qty').forEach(select => {
     const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
     if (!hasEmpty) {
@@ -48,54 +45,67 @@ document.addEventListener('DOMContentLoaded', () => {
       select.insertBefore(emptyOption, select.firstChild);
     }
   });
+}
 
-  // === Обработчик кнопки ===
-  button.addEventListener('click', () => {
-    const selects = document.querySelectorAll('select.qty');
-    const lang = document.documentElement.lang || 'ru';
+// === После загрузки документа ===
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form') || document.body;
 
-    let message = `🧾 <b>Чеклист</b>\n\n`;
+  // Добавляем кнопку отправки (если нет)
+  if (!document.querySelector('.send-button')) {
+    const button = document.createElement('button');
+    button.textContent = 'Отправить в Telegram';
+    button.className = 'send-button';
+    form.appendChild(button);
 
-    selects.forEach(select => {
-      const selected = select.options[select.selectedIndex];
-      if (!selected || selected.value === '') return;
+    // Обработчик кнопки
+    button.addEventListener('click', () => {
+      const selects = document.querySelectorAll('select.qty');
+      const lang = document.documentElement.lang || 'ru';
 
-      const labelRU = select.dataset.labelRu;
-      const labelEN = select.dataset.labelEn;
-      const valueRU = selected.dataset.ru || selected.textContent;
-      const valueEN = selected.dataset.en || selected.textContent;
+      let message = `🧾 <b>Чеклист</b>\n\n`;
 
-      if (labelRU && labelEN) {
-        message += `• ${labelRU} / ${labelEN}: ${valueRU} / ${valueEN}\n`;
-      }
-    });
+      selects.forEach(select => {
+        const selected = select.options[select.selectedIndex];
+        if (!selected || selected.value === '') return;
 
-    const token = '8348920386:AAFlufZWkWqsH4-qoqSSHdmgcEM_s46Ke8Q';
-    const chat_id = '-1002393080811';
+        const labelRU = select.dataset.labelRu;
+        const labelEN = select.dataset.labelEn;
+        const valueRU = selected.dataset.ru || selected.textContent;
+        const valueEN = selected.dataset.en || selected.textContent;
 
-    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chat_id,
-        text: message,
-        parse_mode: 'HTML'
+        if (labelRU && labelEN) {
+          message += `• ${labelRU} / ${labelEN}: ${valueRU} / ${valueEN}\n`;
+        }
+      });
+
+      const token = '8348920386:AAFlufZWkWqsH4-qoqSSHdmgcEM_s46Ke8Q';
+      const chat_id = '-1002393080811';
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chat_id,
+          text: message,
+          parse_mode: 'HTML'
+        })
       })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.ok) {
-        alert('✅ Чеклист отправлен!');
-      } else {
-        alert('❌ Ошибка при отправке в Telegram');
-      }
-    })
-    .catch(err => {
-      alert('❌ Ошибка подключения к Telegram');
-      console.error(err);
+        .then(res => res.json())
+        .then(data => {
+          if (data.ok) {
+            alert('✅ Чеклист отправлен!');
+          } else {
+            alert('❌ Ошибка при отправке в Telegram');
+          }
+        })
+        .catch(err => {
+          alert('❌ Ошибка подключения к Telegram');
+          console.error(err);
+        });
     });
-  });
+  }
 
-  // === Автоматическая установка текущего языка при загрузке ===
-  switchLanguage(document.documentElement.lang || 'ru');
+  // Вставляем пустые опции в каждый селектор
+  ensureEmptyOptionInAllSelects();
 });
