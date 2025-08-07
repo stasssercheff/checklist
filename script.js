@@ -1,11 +1,20 @@
 // === Переключение языка ===
 function switchLanguage(lang) {
+  // Меняем язык у всех меток
   document.querySelectorAll('.check-label').forEach(label => {
-    label.textContent = label.dataset[lang];
+    if (label.dataset[lang]) {
+      label.textContent = label.dataset[lang];
+    }
   });
+
+  // Меняем язык у названий разделов
   document.querySelectorAll('.section-title').forEach(title => {
-    title.textContent = title.dataset[lang];
+    if (title.dataset[lang]) {
+      title.textContent = title.dataset[lang];
+    }
   });
+
+  // Меняем язык у опций в селекторах
   document.querySelectorAll('select').forEach(select => {
     Array.from(select.options).forEach(opt => {
       if (opt.dataset[lang]) {
@@ -18,17 +27,10 @@ function switchLanguage(lang) {
 // === Отправка в Telegram ===
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form') || document.body;
+
   const button = document.createElement('button');
   button.textContent = 'Отправить в Telegram';
-  button.style.marginTop = '30px';
-  button.style.padding = '12px 20px';
-  button.style.fontSize = '18px';
-  button.style.borderRadius = '8px';
-  button.style.background = '#333';
-  button.style.color = '#fff';
-  button.style.border = 'none';
-  button.style.cursor = 'pointer';
-
+  button.className = 'send-button';
   form.appendChild(button);
 
   button.addEventListener('click', () => {
@@ -38,9 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let message = `🧾 <b>Чеклист</b>\n\n`;
 
     selects.forEach(select => {
+      const selected = select.options[select.selectedIndex];
+
+      // Пропускаем, если ничего не выбрано
+      if (!selected || selected.value === '') return;
+
       const labelRU = select.dataset.labelRu;
       const labelEN = select.dataset.labelEn;
-      const selected = select.options[select.selectedIndex];
 
       const valueRU = selected.dataset.ru || selected.textContent;
       const valueEN = selected.dataset.en || selected.textContent;
