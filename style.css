@@ -8,12 +8,13 @@ html, body {
 }
 
 .container {
-  max-width: 95vw;
+  width: 85%;
+  max-width: 900px;
   margin: 20px auto;
   background: #fff;
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 6px rgba(0,0,0,.1);
 }
 
 .lang-switch {
