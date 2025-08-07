@@ -48,21 +48,27 @@ document.addEventListener('DOMContentLoaded', () => {
   // Применить язык после вставки опций
   switchLanguage(lang);
 
-  // Кнопка отправки
+  // === Вставка текущей даты ===
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const formattedDate = `${day}/${month}`;
+  const dateDiv = document.getElementById('autodate');
+  if (dateDiv) dateDiv.textContent = formattedDate;
+
+  // === Отправка в Telegram ===
   const button = document.getElementById('sendToTelegram');
   button.addEventListener('click', () => {
     const currentLang = document.documentElement.lang || 'ru';
     let message = `🧾 <b>Чеклист</b>\n\n`;
 
-    // === Дата ===
-    const day = document.querySelector('select[name="day"]')?.value || '—';
-    const month = document.querySelector('select[name="month"]')?.value || '—';
+    // Дата
     const dateLine = currentLang === 'en'
-      ? `📅 Date: ${day}/${month}`
-      : `📅 Дата: ${day}/${month}`;
+      ? `📅 Date: ${formattedDate}`
+      : `📅 Дата: ${formattedDate}`;
     message += `${dateLine}\n`;
 
-    // === Имя ===
+    // Имя
     const nameSelect = document.querySelector('select[name="chef"]');
     const selectedChef = nameSelect?.options[nameSelect.selectedIndex];
     const nameRU = selectedChef?.dataset.ru || '— Не выбрано —';
@@ -72,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : `👨‍🍳 Имя: ${nameRU}`;
     message += `${nameLine}\n\n`;
 
-    // === Разделы ===
+    // Разделы
     document.querySelectorAll('.menu-section').forEach(section => {
       const sectionTitle = section.querySelector('.section-title');
       const titleRU = sectionTitle?.dataset.ru || '';
@@ -100,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      // === Комментарий после раздела ===
+      // Комментарий после раздела
       const nextBlock = section.nextElementSibling;
       const commentField = nextBlock?.querySelector('textarea.comment');
       if (commentField && commentField.value.trim()) {
@@ -111,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       message += `\n`;
     });
 
-    // === Отправка в Telegram ===
+    // Отправка
     const token = '8348920386:AAFlufZWkWqsH4-qoqSSHdmgcEM_s46Ke8Q';
     const chat_id = '-1002393080811';
 
@@ -128,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
       if (data.ok) {
         alert('✅ Чеклист отправлен!');
+        // Очистка localStorage можно вставить тут
       } else {
         alert('❌ Ошибка при отправке в Telegram');
       }
