@@ -85,7 +85,7 @@ select {
 
 .dish select.qty {
   width: 220px;
-  min-width: 220px;
+  min-width: 260px;
   max-width: 100%;
   padding: 12px;
   font-size: 30px;
