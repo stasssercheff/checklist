@@ -1,152 +1,106 @@
-/* ===== Общий фон и контейнер ===== */
 html, body {
   margin: 0;
   padding: 0;
-  background: #eaeaea;
-  font-family: Arial, sans-serif;
-  font-size: 22px; /* увеличен шрифт */
   overflow-x: hidden;
-}
-
-.wrapper {
-  padding: 24px;
-  min-height: 100vh;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  font-size: 24px; /* ещё крупнее */
+  line-height: 1.6;
 }
 
 .container {
-  width: 100%;
-  max-width: 750px;
+  max-width: 700px;
+  margin: 24px auto;
   background: #fff;
-  padding: 24px;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 0 10px rgba(0,0,0,.15);
 }
 
-/* ===== Переключатель языка ===== */
 .lang-switch {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  gap: 0;
   margin-bottom: 30px;
 }
 
 .lang-switch button {
-  flex: 1 1 50%;
-  padding: 16px 0;
-  font-size: 22px;
-  border: 1px solid #ccc;
-  background: #f5f5f5;
-  cursor: pointer;
+  flex: 1;
+  padding: 18px 0;
+  font-size: 24px;
   border-radius: 0;
-}
-
-.lang-switch button:first-child {
-  border-top-left-radius: 12px;
-  border-bottom-left-radius: 12px;
-}
-
-.lang-switch button:last-child {
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border: 1px solid #ccc;
+  background: #e8e8e8;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .lang-switch button:hover {
-  background: #ddd;
+  background: #d0d0d0;
 }
 
-/* ===== Секции чеклиста ===== */
+/* Секции меню */
 .menu-section {
-  margin: 32px 0;
+  margin: 40px 0;
   padding: 20px;
   background: #f3f1ed;
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 .section-title {
   background: #e1ded9;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 24px;
-  margin-bottom: 18px;
+  padding: 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 26px;
   text-align: center;
+  margin-bottom: 24px;
 }
 
-/* ===== Один пункт (dish) ===== */
+/* Блоки пунктов */
 .dish {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
-  margin: 16px 0;
-  padding: 14px 18px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  font-size: 22px;
+  margin-bottom: 28px;
 }
 
-.dish label,
-.check-label {
-  flex: 1 1 60%;
+.check-label,
+.dish label {
+  font-size: 24px;
+  font-weight: 600;
   word-break: break-word;
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 1.4;
-  margin: 0;
-  padding-right: 10px;
 }
 
-/* ===== Селекторы ===== */
-.dish select.qty {
-  flex: 0 0 180px;
+/* Селекторы */
+select.qty {
+  font-size: 24px;
   padding: 14px;
-  font-size: 22px;
-  height: 58px;
+  border-radius: 10px;
   border: 1px solid #ccc;
-  border-radius: 8px;
   background: #fff;
   color: #333;
   text-align: center;
-  text-align-last: center;
-}
-
-.dish select.qty option {
-  text-align: center;
-}
-
-/* ===== Блок даты ===== */
-.date-group {
-  display: flex;
-  gap: 14px;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-.date-group select {
-  flex: 1;
-  padding: 14px;
-  font-size: 22px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #fff;
-  height: 58px;
+/* Варианты в селекторах */
+select.qty option {
+  font-size: 24px;
   text-align: center;
-  text-align-last: center;
 }
 
-/* ===== Поля ввода и textarea ===== */
-input[type="text"],
+/* Комментарии и поля ввода */
 textarea,
+input[type="text"],
 input:not([type="number"]):not([type="submit"]) {
-  width: 100%;
+  font-size: 24px;
   padding: 16px;
-  font-size: 22px;
+  border-radius: 10px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -155,18 +109,18 @@ textarea {
   min-height: 100px;
 }
 
-/* ===== Кнопка отправки ===== */
+/* Кнопка отправки */
 button.send-button,
 #sendToTelegram {
-  width: 100%;
+  font-size: 26px;
+  padding: 20px;
+  border-radius: 12px;
   background: #555;
-  color: #fff;
+  color: white;
   border: none;
-  padding: 22px;
-  font-size: 24px;
-  border-radius: 10px;
   cursor: pointer;
-  margin-top: 32px;
+  width: 100%;
+  margin-top: 40px;
 }
 
 button.send-button:hover,
@@ -174,11 +128,28 @@ button.send-button:hover,
   background: #222;
 }
 
-/* ===== Попап ===== */
+/* Блок выбора даты */
+.date-group {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: 100%;
+}
+
+.date-group select {
+  flex: 1;
+  font-size: 24px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+/* Попап */
 .popup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -190,48 +161,51 @@ button.send-button:hover,
 
 .popup-content {
   background: #fff;
-  padding: 26px;
-  border-radius: 14px;
+  padding: 28px;
+  border-radius: 16px;
   max-width: 90%;
   text-align: center;
-}
-
-.popup-content pre {
-  white-space: pre-line;
-  text-align: left;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1.5;
-  margin: 16px 0;
 }
 
-/* ===== Адаптация для мобилок ===== */
+/* Адаптация для мобильных */
 @media screen and (max-width: 480px) {
   .dish {
     flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .dish label,
-  .check-label {
-    padding-right: 0;
-    margin-bottom: 8px;
-  }
-
-  .dish select.qty {
-    width: 100%;
-    margin-top: 6px;
+    align-items: stretch;
   }
 
   .date-group {
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
   }
 
   .lang-switch {
     flex-direction: row;
+    flex-wrap: nowrap;
   }
 
-  .date-group select {
-    width: 100%;
+  .lang-switch button {
+    font-size: 22px;
+    padding: 16px 0;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .check-label,
+  .dish label,
+  select.qty,
+  select.qty option,
+  input,
+  textarea {
+    font-size: 22px;
+  }
+
+  button {
+    font-size: 24px;
+    padding: 18px;
   }
 }
