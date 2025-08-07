@@ -4,32 +4,26 @@ function switchLanguage(lang) {
 
   // Заголовки разделов
   document.querySelectorAll('.section-title').forEach(title => {
-    if (title.dataset[lang]) {
-      title.textContent = title.dataset[lang];
-    }
+    if (title.dataset[lang]) title.textContent = title.dataset[lang];
   });
 
   // Метки
   document.querySelectorAll('.check-label').forEach(label => {
-    if (label.dataset[lang]) {
-      label.textContent = label.dataset[lang];
-    }
+    if (label.dataset[lang]) label.textContent = label.dataset[lang];
   });
 
   // Опции селекторов
   document.querySelectorAll('select').forEach(select => {
     Array.from(select.options).forEach(option => {
-      if (option.dataset[lang]) {
-        option.textContent = option.dataset[lang];
-      }
+      if (option.dataset[lang]) option.textContent = option.dataset[lang];
     });
   });
 
-  // Обновить текст пустых опций
+  // Обновить пустые опции
   document.querySelectorAll('select.qty').forEach(select => {
     const emptyOption = select.querySelector('option[value=""]');
     if (emptyOption) {
-      emptyOption.textContent = lang === 'en' ? '— Select —' : '— Выбрать —';
+      emptyOption.textContent = lang === 'en' ? '— Not selected —' : '— Не выбрано —';
     }
   });
 }
@@ -38,7 +32,7 @@ function switchLanguage(lang) {
 document.addEventListener('DOMContentLoaded', () => {
   const lang = document.documentElement.lang || 'ru';
 
-  // Вставка пустой опции во все select.qty
+  // Вставка пустой опции в каждый select.qty, если её нет
   document.querySelectorAll('select.qty').forEach(select => {
     const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
     if (!hasEmpty) {
@@ -51,37 +45,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Применить язык после добавления опций
+  // Применить язык после вставки опций
   switchLanguage(lang);
 
-  // Обработка кнопки
+  // Кнопка отправки
   const button = document.getElementById('sendToTelegram');
   button.addEventListener('click', () => {
-    const lang = document.documentElement.lang || 'ru';
+    const currentLang = document.documentElement.lang || 'ru';
     let message = `🧾 <b>Чеклист</b>\n\n`;
 
     // === Дата ===
     const day = document.querySelector('select[name="day"]')?.value || '—';
     const month = document.querySelector('select[name="month"]')?.value || '—';
-    const dateLine = lang === 'en' ? `📅 Date: ${day}/${month}` : `📅 Дата: ${day}/${month}`;
+    const dateLine = currentLang === 'en'
+      ? `📅 Date: ${day}/${month}`
+      : `📅 Дата: ${day}/${month}`;
     message += `${dateLine}\n`;
 
     // === Имя ===
     const nameSelect = document.querySelector('select[name="chef"]');
     const selectedChef = nameSelect?.options[nameSelect.selectedIndex];
-    const nameLine = lang === 'en' 
-      ? `👨‍🍳 Name: ${(selectedChef?.dataset.en || '— Not selected —')}`
-      : `👨‍🍳 Имя: ${(selectedChef?.dataset.ru || '— Не выбрано —')}`;
+    const nameRU = selectedChef?.dataset.ru || '— Не выбрано —';
+    const nameEN = selectedChef?.dataset.en || '— Not selected —';
+    const nameLine = currentLang === 'en'
+      ? `👨‍🍳 Name: ${nameEN}`
+      : `👨‍🍳 Имя: ${nameRU}`;
     message += `${nameLine}\n\n`;
 
-    // === Все разделы ===
+    // === Разделы ===
     document.querySelectorAll('.menu-section').forEach(section => {
       const sectionTitle = section.querySelector('.section-title');
-      const title = sectionTitle?.dataset[lang] || sectionTitle?.textContent || '';
+      const titleRU = sectionTitle?.dataset.ru || '';
+      const titleEN = sectionTitle?.dataset.en || '';
+      const sectionLine = currentLang === 'en'
+        ? `🔸 <b>${titleEN}</b>\n`
+        : `🔸 <b>${titleRU}</b>\n`;
+      message += sectionLine;
 
-      message += `🔸 <b>${title}</b>\n`;
-
-      // Все .dish внутри
+      // Все блюда в разделе
       const dishBlocks = section.querySelectorAll('.dish');
       dishBlocks.forEach(dish => {
         const select = dish.querySelector('select.qty');
@@ -99,10 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      // === Комментарий ===
-      const comment = section.nextElementSibling?.querySelector('textarea.comment');
-      if (comment && comment.value.trim()) {
-        message += `💬 ${lang === 'en' ? 'Comment' : 'Комментарий'}: ${comment.value.trim()}\n`;
+      // === Комментарий после раздела ===
+      const nextBlock = section.nextElementSibling;
+      const commentField = nextBlock?.querySelector('textarea.comment');
+      if (commentField && commentField.value.trim()) {
+        const commentText = commentField.value.trim();
+        message += `💬 ${currentLang === 'en' ? 'Comment' : 'Комментарий'}: ${commentText}\n`;
       }
 
       message += `\n`;
