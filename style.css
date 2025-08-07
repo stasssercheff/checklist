@@ -3,82 +3,92 @@ html, body {
   padding: 0;
   overflow-x: hidden;
   font-family: Arial, sans-serif;
-  background: #f5f5f5;
   font-size: 20px;
+  background: #f5f5f5;
+  color: #222;
+}
+
+.wrapper {
+  width: 100%;
 }
 
 .container {
   width: 85%;
-  max-width: 900px;
   margin: 20px auto;
   background: #fff;
   border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 0 6px rgba(0,0,0,.1);
+  padding: 20px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, .1);
 }
 
 .lang-switch {
   display: flex;
+  gap: 0;
   margin-bottom: 20px;
 }
 
 .lang-switch button {
-  width: 50%;
-  padding: 16px;
-  font-size: 22px;
-  font-weight: bold;
+  flex: 1;
+  font-size: 20px;
+  padding: 14px;
   border: none;
-  border-radius: 8px;
-  background: #444;
-  color: #fff;
+  background: #333;
+  color: white;
   cursor: pointer;
+  border-radius: 0;
 }
 
-.lang-switch button + button {
-  margin-left: 8px;
+.lang-switch button:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
 }
 
-.lang-switch button:hover {
-  background: #000;
+.lang-switch button:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.menu-section {
+  margin: 30px 0;
+  padding: 16px;
+  background: #f3f1ed;
+  border-radius: 12px;
 }
 
 .section-title {
   background: #e1ded9;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
   font-size: 22px;
+  margin-bottom: 16px;
   text-align: center;
-  margin-top: 24px;
-  margin-bottom: 14px;
 }
 
 .dish {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  margin: 12px 0;
   font-size: 20px;
   flex-wrap: wrap;
 }
 
 .check-label {
   flex: 1 1 60%;
-  font-weight: 600;
-  font-size: 20px;
   margin-bottom: 6px;
+  font-weight: 600;
 }
 
 .dish select.qty {
-  flex: 1 1 35%;
-  min-width: 130px;
-  max-width: 180px;
-  font-size: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
+  flex: 0 1 30%;
+  max-width: 140px;
+  padding: 10px 6px;
+  font-size: 18px;
   border-radius: 8px;
-  background: #fff;
-  color: #000;
+  border: 1px solid #ccc;
+  background: white;
+  text-align: center;
   text-align-last: center;
 }
 
@@ -88,44 +98,47 @@ html, body {
 
 textarea.comment {
   width: 100%;
-  padding: 14px;
-  font-size: 20px;
+  padding: 12px;
+  font-size: 18px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 6px;
   resize: vertical;
-  min-height: 100px;
+  margin-top: 10px;
   box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 20px;
+  min-height: 90px;
 }
 
+/* Селектор даты */
 .date-group {
   display: flex;
   gap: 10px;
-  margin-top: 6px;
+  margin-top: 10px;
 }
 
 .date-group select {
   flex: 1;
-  padding: 12px;
-  font-size: 20px;
-  border-radius: 6px;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  min-width: 120px;
+  background: #fff;
+  text-align: center;
+  text-align-last: center;
 }
 
-#sendToTelegram {
+/* Кнопка отправки */
+button#sendToTelegram {
   width: 100%;
-  background: #444;
-  color: white;
-  font-size: 22px;
   padding: 16px;
+  font-size: 20px;
+  background-color: #444;
+  color: white;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  margin-top: 30px;
+  margin-top: 24px;
 }
 
-#sendToTelegram:hover {
-  background: #000;
+button#sendToTelegram:hover {
+  background-color: #222;
 }
