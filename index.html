@@ -6,49 +6,51 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+  <div class="wrapper">
+  
+    <div class="container">
 
-    <!-- Переключение языка -->
-    <div class="lang-switch">
-      <button onclick="switchLanguage('ru')">RU</button>
-      <button onclick="switchLanguage('en')">EN</button>
-    </div>
+      <!-- Переключение языка -->
+      <div class="lang-switch">
+        <button onclick="switchLanguage('ru')">RU</button>
+        <button onclick="switchLanguage('en')">EN</button>
+      </div>
 
-    <!-- Дата -->
-    <div class="dish">
-      <label class="check-label" data-ru="Дата" data-en="Date">Дата</label>
-      <div class="date-group">
-        <select name="day">
-          <option>ДД</option>
-          <option>01</option><option>02</option><option>03</option><option>04</option>
-          <option>05</option><option>06</option><option>07</option><option>08</option>
-          <option>09</option><option>10</option><option>11</option><option>12</option>
-          <option>13</option><option>14</option><option>15</option><option>16</option>
-          <option>17</option><option>18</option><option>19</option><option>20</option>
-          <option>21</option><option>22</option><option>23</option><option>24</option>
-          <option>25</option><option>26</option><option>27</option><option>28</option>
-          <option>29</option><option>30</option><option>31</option>
-        </select>
-        <select name="month">
-          <option>MM</option>
-          <option>01</option><option>02</option><option>03</option>
-          <option>04</option><option>05</option><option>06</option>
-          <option>07</option><option>08</option><option>09</option>
-          <option>10</option><option>11</option><option>12</option>
+      <!-- Дата -->
+      <div class="dish">
+        <label class="check-label" data-ru="Дата" data-en="Date">Дата</label>
+        <div class="date-group">
+          <select name="day">
+            <option>ДД</option>
+            <option>01</option><option>02</option><option>03</option><option>04</option>
+            <option>05</option><option>06</option><option>07</option><option>08</option>
+            <option>09</option><option>10</option><option>11</option><option>12</option>
+            <option>13</option><option>14</option><option>15</option><option>16</option>
+            <option>17</option><option>18</option><option>19</option><option>20</option>
+            <option>21</option><option>22</option><option>23</option><option>24</option>
+            <option>25</option><option>26</option><option>27</option><option>28</option>
+            <option>29</option><option>30</option><option>31</option>
+          </select>
+          <select name="month">
+            <option>MM</option>
+            <option>01</option><option>02</option><option>03</option>
+            <option>04</option><option>05</option><option>06</option>
+            <option>07</option><option>08</option><option>09</option>
+            <option>10</option><option>11</option><option>12</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Имя -->
+      <div class="dish">
+        <label class="check-label" data-ru="Имя" data-en="Name">Имя</label>
+        <select name="chef" class="qty" data-label-ru="Имя" data-label-en="Name">
+          <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
+          <option value="maxim" data-ru="Максим" data-en="Maksim">Максим</option>
+          <option value="bakha" data-ru="Баха" data-en="Bakha">Баха</option>
+          <option value="miguel" data-ru="Miguel" data-en="Miguel">Miguel</option>
         </select>
       </div>
-    </div>
-
-    <!-- Имя -->
-    <div class="dish">
-      <label class="check-label" data-ru="Имя" data-en="Name">Имя</label>
-      <select name="chef" class="qty" data-label-ru="Имя" data-label-en="Name">
-        <option value="" data-ru="— Выбрать —" data-en="— Select —">— Выбрать —</option>
-        <option value="maxim" data-ru="Максим" data-en="Maksim">Максим</option>
-        <option value="bakha" data-ru="Баха" data-en="Bakha">Баха</option>
-        <option value="miguel" data-ru="Miguel" data-en="Miguel">Miguel</option>
-      </select>
-    </div>
 
     <!-- Раздел: Оборудование -->
 <div class="menu-section">
@@ -385,8 +387,8 @@
     </select>
   </div>
 
-</div>
-
+   </div>
+  </div>
 
   <script>
     function switchLanguage(lang) {
