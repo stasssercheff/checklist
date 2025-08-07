@@ -1,13 +1,15 @@
 // === Переключение языка ===
 function switchLanguage(lang) {
-  // Заголовки
+  document.documentElement.lang = lang;
+
+  // Заголовки разделов
   document.querySelectorAll('.section-title').forEach(title => {
     if (title.dataset[lang]) {
       title.textContent = title.dataset[lang];
     }
   });
 
-  // Метки
+  // Метки (label)
   document.querySelectorAll('.check-label').forEach(label => {
     if (label.dataset[lang]) {
       label.textContent = label.dataset[lang];
@@ -22,18 +24,13 @@ function switchLanguage(lang) {
       }
     });
   });
-
-  // Переключаем язык у всех пустых опций
-  document.querySelectorAll('select.qty option[value=""]').forEach(option => {
-    option.textContent = lang === 'en' ? '— Select —' : '— Выбрать —';
-  });
-
-  // Сохраняем текущий язык в <html lang="">
-  document.documentElement.lang = lang;
 }
 
-// === Добавление пустой опции в каждый .qty ===
-function ensureEmptyOptionInAllSelects() {
+// === После загрузки документа ===
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form') || document.body;
+
+  // === Добавление пустой опции в каждый селектор .qty ===
   document.querySelectorAll('select.qty').forEach(select => {
     const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
     if (!hasEmpty) {
@@ -45,21 +42,15 @@ function ensureEmptyOptionInAllSelects() {
       select.insertBefore(emptyOption, select.firstChild);
     }
   });
-}
 
-// === После загрузки документа ===
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('form') || document.body;
+  // === Обновить текст опций после вставки пустых
+  const currentLang = document.documentElement.lang || 'ru';
+  switchLanguage(currentLang);
 
-  // Добавляем кнопку отправки (если нет)
-  if (!document.querySelector('.send-button')) {
-    const button = document.createElement('button');
-    button.textContent = 'Отправить в Telegram';
-    button.className = 'send-button';
-    form.appendChild(button);
-
-    // Обработчик кнопки
-    button.addEventListener('click', () => {
+  // === Обработчик кнопки Telegram ===
+  const tgButton = document.getElementById('sendToTelegram');
+  if (tgButton) {
+    tgButton.addEventListener('click', () => {
       const selects = document.querySelectorAll('select.qty');
       const lang = document.documentElement.lang || 'ru';
 
@@ -71,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const labelRU = select.dataset.labelRu;
         const labelEN = select.dataset.labelEn;
+
         const valueRU = selected.dataset.ru || selected.textContent;
         const valueEN = selected.dataset.en || selected.textContent;
 
@@ -91,21 +83,18 @@ document.addEventListener('DOMContentLoaded', () => {
           parse_mode: 'HTML'
         })
       })
-        .then(res => res.json())
-        .then(data => {
-          if (data.ok) {
-            alert('✅ Чеклист отправлен!');
-          } else {
-            alert('❌ Ошибка при отправке в Telegram');
-          }
-        })
-        .catch(err => {
-          alert('❌ Ошибка подключения к Telegram');
-          console.error(err);
-        });
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok) {
+          alert('✅ Чеклист отправлен!');
+        } else {
+          alert('❌ Ошибка при отправке в Telegram');
+        }
+      })
+      .catch(err => {
+        alert('❌ Ошибка подключения к Telegram');
+        console.error(err);
+      });
     });
   }
-
-  // Вставляем пустые опции в каждый селектор
-  ensureEmptyOptionInAllSelects();
 });
