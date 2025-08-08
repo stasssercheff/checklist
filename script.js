@@ -24,11 +24,39 @@ function switchLanguage(lang) {
   });
 }
 
+// === Сохранение и восстановление данных формы ===
+function saveFormData() {
+  const data = {};
+  document.querySelectorAll('select').forEach(select => {
+    data[select.name || select.id] = select.value;
+  });
+  document.querySelectorAll('textarea.comment').forEach(textarea => {
+    data[textarea.name || textarea.id] = textarea.value;
+  });
+  localStorage.setItem('formData', JSON.stringify(data));
+}
+
+function restoreFormData() {
+  const saved = localStorage.getItem('formData');
+  if (!saved) return;
+  const data = JSON.parse(saved);
+  document.querySelectorAll('select').forEach(select => {
+    if (data[select.name || select.id] !== undefined) {
+      select.value = data[select.name || select.id];
+    }
+  });
+  document.querySelectorAll('textarea.comment').forEach(textarea => {
+    if (data[textarea.name || textarea.id] !== undefined) {
+      textarea.value = data[textarea.name || textarea.id];
+    }
+  });
+}
+
 // === DOMContentLoaded ===
 document.addEventListener('DOMContentLoaded', () => {
   const lang = document.documentElement.lang || 'ru';
 
-  // Вставка пустой опции в каждый select.qty, если её нет
+  // Вставка пустой опции в каждый select.qty
   document.querySelectorAll('select.qty').forEach(select => {
     const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
     if (!hasEmpty) {
@@ -39,15 +67,16 @@ document.addEventListener('DOMContentLoaded', () => {
       emptyOption.textContent = '—';
       emptyOption.selected = true;
       select.insertBefore(emptyOption, select.firstChild);
-    } else {
-      select.value = '';
     }
   });
 
-  // Применить язык после вставки опций
+  // Восстановление данных формы из localStorage
+  restoreFormData();
+
+  // Применение языка
   switchLanguage(lang);
 
-  // === Вставка текущей даты ===
+  // === Автозаполнение даты ===
   const today = new Date();
   const day = String(today.getDate()).padStart(2, '0');
   const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -55,7 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const dateDiv = document.getElementById('autodate');
   if (dateDiv) dateDiv.textContent = formattedDate;
 
-  // === Отправка в Telegram (на 2 языках) ===
+  // === Слушатели автосохранения ===
+  document.querySelectorAll('select, textarea.comment').forEach(el => {
+    el.addEventListener('input', saveFormData);
+  });
+
+  // === Отправка в Telegram (два языка) ===
   const button = document.getElementById('sendToTelegram');
   button.addEventListener('click', () => {
     const buildMessage = (lang) => {
@@ -82,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
           const labelText = select.dataset[`label${lang.toUpperCase()}`] || label.dataset[lang] || '';
           const selectedOption = select.options[select.selectedIndex];
           const value = selectedOption?.dataset[lang] || '—';
-
           message += `• ${labelText}: ${value}\n`;
         });
 
@@ -115,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }).then(res => res.json());
     };
 
-    // Отправка обоих сообщений по очереди
     sendMessage(messageRU)
       .then(data1 => {
         if (!data1.ok) throw new Error(data1.description);
@@ -124,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(data2 => {
         if (!data2.ok) throw new Error(data2.description);
         alert('✅ Чеклист отправлен!');
-        // localStorage.clear(); // Можно раскомментировать при необходимости
+        localStorage.clear(); // Сброс данных ТОЛЬКО после успешной отправки
       })
       .catch(err => {
         alert('❌ Ошибка при отправке: ' + err.message);
