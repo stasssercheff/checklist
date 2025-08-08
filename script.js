@@ -169,7 +169,13 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(() => {
         alert('✅ Чеклист отправлен!');
-        localStorage.clear();
+        } else {
+    alert('❌ Ошибка при отправке:\n' + JSON.stringify(data, null, 2));
+  }
+})
+        
+        
+        
       })
       .catch(err => {
         console.error('❌ Ошибка при отправке:', err);
