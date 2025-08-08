@@ -2,17 +2,14 @@
 function switchLanguage(lang) {
   document.documentElement.lang = lang;
 
-  // Заголовки разделов
   document.querySelectorAll('.section-title').forEach(title => {
     if (title.dataset[lang]) title.textContent = title.dataset[lang];
   });
 
-  // Метки
   document.querySelectorAll('.check-label').forEach(label => {
     if (label.dataset[lang]) label.textContent = label.dataset[lang];
   });
 
-  // Опции селекторов
   document.querySelectorAll('select').forEach(select => {
     Array.from(select.options).forEach(option => {
       if (option.value === '') {
@@ -56,7 +53,6 @@ function restoreFormData() {
 document.addEventListener('DOMContentLoaded', () => {
   const lang = document.documentElement.lang || 'ru';
 
-  // Вставка пустой опции в каждый select.qty
   document.querySelectorAll('select.qty').forEach(select => {
     const hasEmpty = Array.from(select.options).some(opt => opt.value === '');
     if (!hasEmpty) {
@@ -70,13 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Восстановление данных формы
   restoreFormData();
-
-  // Применение языка
   switchLanguage(lang);
 
-  // Вставка текущей даты
   const today = new Date();
   const day = String(today.getDate()).padStart(2, '0');
   const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -84,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const dateDiv = document.getElementById('autodate');
   if (dateDiv) dateDiv.textContent = formattedDate;
 
-  // Автосохранение при изменениях
   document.querySelectorAll('select, textarea.comment').forEach(el => {
     el.addEventListener('input', saveFormData);
   });
@@ -134,7 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageRU = buildMessage('ru');
     const messageEN = buildMessage('en');
 
-    const sendSplitMessage = async (msg) => {
+    console.log('📦 RU Message:\n', messageRU);
+    console.log('📦 EN Message:\n', messageEN);
+
+    const sendSplitMessage = async (msg, langLabel) => {
       const maxLength = 4096;
       const parts = [];
 
@@ -142,7 +136,11 @@ document.addEventListener('DOMContentLoaded', () => {
         parts.push(msg.substring(i, i + maxLength));
       }
 
-      for (const part of parts) {
+      console.log(`✂️ ${langLabel}: сообщение разбито на ${parts.length} частей`);
+
+      for (const [index, part] of parts.entries()) {
+        console.log(`🚀 Отправка части ${index + 1}/${parts.length} (${langLabel})`, part);
+
         const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -150,20 +148,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const data = await res.json();
-        if (!data.ok) throw new Error(data.description);
+
+        if (!data.ok) {
+          console.error(`❌ Ошибка при отправке части ${index + 1}:`, data);
+          throw new Error(data.description || 'Ошибка без описания');
+        } else {
+          console.log(`✅ Успешно отправлена часть ${index + 1}/${parts.length}`);
+        }
       }
     };
 
     Promise.resolve()
-      .then(() => sendSplitMessage(messageRU))
-      .then(() => sendSplitMessage(messageEN))
+      .then(() => {
+        alert('📤 Отправляем на русском...');
+        return sendSplitMessage(messageRU, 'RU');
+      })
+      .then(() => {
+        alert('📤 Отправляем на английском...');
+        return sendSplitMessage(messageEN, 'EN');
+      })
       .then(() => {
         alert('✅ Чеклист отправлен!');
         localStorage.clear();
       })
       .catch(err => {
+        console.error('❌ Ошибка при отправке:', err);
         alert('❌ Ошибка при отправке: ' + err.message);
-        console.error(err);
       });
   });
 });
