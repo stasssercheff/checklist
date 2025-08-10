@@ -172,13 +172,27 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
+    // Функция очистки формы
+    const clearForm = () => {
+      // Сброс всех селектов в пустое значение (выбирает первый пустой option)
+      document.querySelectorAll('select').forEach(select => {
+        select.value = '';
+      });
+
+      // Очистка всех textarea с классом comment
+      document.querySelectorAll('textarea.comment').forEach(textarea => {
+        textarea.value = '';
+      });
+    };
+
     (async () => {
       try {
         for (const msg of messages) {
           await sendAllParts(msg);
         }
         alert('✅ Чеклист отправлен!');
-        localStorage.clear(); // Сброс только после успешной отправки
+        localStorage.clear(); // сброс локального хранилища
+        clearForm();          // очистка формы визуально
       } catch (err) {
         alert('❌ Ошибка при отправке: ' + err.message);
         console.error(err);
