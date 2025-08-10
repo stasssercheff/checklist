@@ -52,32 +52,6 @@ function restoreFormData() {
   });
 }
 
-// === Разделение длинных сообщений по лимиту Telegram ===
-function splitBySections(text, lang, limit = 4096) {
-  const sections = text.split("\n\n");
-  let chunks = [];
-  let currentChunk = "";
-
-  sections.forEach(section => {
-    if ((currentChunk + "\n\n" + section).length > limit) {
-      chunks.push(currentChunk.trim());
-      currentChunk = section;
-    } else {
-      currentChunk += (currentChunk ? "\n\n" : "") + section;
-    }
-  });
-
-  if (currentChunk) chunks.push(currentChunk.trim());
-
-  // Добавляем пометки "Часть X/Y"
-  return chunks.map((chunk, index) => {
-    const partInfo = lang === 'en'
-      ? ` (Part ${index + 1}/${chunks.length})`
-      : ` (Часть ${index + 1}/${chunks.length})`;
-    return chunk.replace(/^(🧾 <b>.*?<\/b>)/, `$1${partInfo}`);
-  });
-}
-
 // === DOMContentLoaded ===
 document.addEventListener('DOMContentLoaded', () => {
   const lang = document.documentElement.lang || 'ru';
@@ -99,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Восстановление данных формы
   restoreFormData();
 
-  // Применение языка
+  // Применить язык
   switchLanguage(lang);
 
   // === Автозаполнение даты ===
@@ -110,50 +84,65 @@ document.addEventListener('DOMContentLoaded', () => {
   const dateDiv = document.getElementById('autodate');
   if (dateDiv) dateDiv.textContent = formattedDate;
 
-  // === Автосохранение при изменении полей ===
+  // === Автосохранение ===
   document.querySelectorAll('select, textarea.comment').forEach(el => {
     el.addEventListener('input', saveFormData);
   });
 
-  // === Отправка в Telegram ===
-  const button = document.getElementById('sendToTelegram');
-  button.addEventListener('click', () => {
+  // === Функция сборки сообщения ===
+  const buildMessage = (lang) => {
+    let message = `🧾 <b>${lang === 'en' ? 'Checklist' : 'Чеклист'}</b>\n\n`;
 
-    const buildMessage = (lang) => {
-      let message = `🧾 <b>${lang === 'en' ? 'Checklist' : 'Чеклист'}</b>\n\n`;
-      message += `📅 ${lang === 'en' ? 'Date' : 'Дата'}: ${formattedDate}\n`;
+    // Дата
+    message += `📅 ${lang === 'en' ? 'Date' : 'Дата'}: ${formattedDate}\n`;
 
-      const nameSelect = document.querySelector('select[name="chef"]');
-      const selectedChef = nameSelect?.options[nameSelect.selectedIndex];
-      const name = selectedChef?.dataset[lang] || '—';
-      message += `${lang === 'en' ? '👨‍🍳 Name' : '👨‍🍳 Имя'}: ${name}\n\n`;
+    // Имя
+    const nameSelect = document.querySelector('select[name="chef"]');
+    const selectedChef = nameSelect?.options[nameSelect.selectedIndex];
+    const name = selectedChef?.dataset[lang] || '—';
+    message += `${lang === 'en' ? '👨‍🍳 Name' : '👨‍🍳 Имя'}: ${name}\n\n`;
 
-      document.querySelectorAll('.menu-section').forEach(section => {
-        const sectionTitle = section.querySelector('.section-title');
-        const title = sectionTitle?.dataset[lang] || '';
-        message += `🔸 <b>${title}</b>\n`;
+    // Разделы
+    document.querySelectorAll('.menu-section').forEach(section => {
+      const sectionTitle = section.querySelector('.section-title');
+      const title = sectionTitle?.dataset[lang] || '';
+      message += `🔸 <b>${title}</b>\n`;
 
-        section.querySelectorAll('.dish').forEach(dish => {
-          const select = dish.querySelector('select.qty');
-          const label = dish.querySelector('label.check-label');
-          const labelText = select.dataset[`label${lang.toUpperCase()}`] || label.dataset[lang] || '';
-          const selectedOption = select.options[select.selectedIndex];
-          const value = selectedOption?.dataset[lang] || '—';
-          message += `• ${labelText}: ${value}\n`;
-        });
+      section.querySelectorAll('.dish').forEach(dish => {
+        const select = dish.querySelector('select.qty');
+        const label = dish.querySelector('label.check-label');
 
-        const nextBlock = section.nextElementSibling;
-        const commentField = nextBlock?.querySelector('textarea.comment');
-        if (commentField && commentField.value.trim()) {
-          message += `💬 ${lang === 'en' ? 'Comment' : 'Комментарий'}: ${commentField.value.trim()}\n`;
+        let labelText = '—';
+        let value = '—';
+
+        if (label) {
+          labelText = select?.dataset[`label${lang.toUpperCase()}`] || label.dataset[lang] || '—';
         }
 
-        message += `\n`;
+        if (select) {
+          const selectedOption = select.options[select.selectedIndex];
+          value = selectedOption?.dataset[lang] || '—';
+        }
+
+        message += `• ${labelText}: ${value}\n`;
       });
 
-      return message.trim();
-    };
+      // Комментарий
+      const nextBlock = section.nextElementSibling;
+      const commentField = nextBlock?.querySelector('textarea.comment');
+      if (commentField && commentField.value.trim()) {
+        message += `💬 ${lang === 'en' ? 'Comment' : 'Комментарий'}: ${commentField.value.trim()}\n`;
+      }
 
+      message += `\n`;
+    });
+
+    return message;
+  };
+
+  // === Отправка сообщений ===
+  const button = document.getElementById('sendToTelegram');
+  button.addEventListener('click', () => {
     const token = '8348920386:AAFlufZWkWqsH4-qoqSSHdmgcEM_s46Ke8Q';
     const chat_id = '-1002393080811';
 
@@ -161,34 +150,39 @@ document.addEventListener('DOMContentLoaded', () => {
       return fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id, text: msg, parse_mode: 'HTML' })
+        body: JSON.stringify({
+          chat_id,
+          text: msg,
+          parse_mode: 'HTML'
+        })
       }).then(res => res.json());
     };
 
-    const sendChunksSequentially = async (chunks) => {
-      for (let chunk of chunks) {
+    // Разделяем на 2 языка
+    const messages = [buildMessage('ru'), buildMessage('en')];
+
+    // Разделение на части, если длиннее 4096 символов
+    const sendAllParts = async (text) => {
+      let start = 0;
+      while (start < text.length) {
+        const chunk = text.slice(start, start + 4000);
         const res = await sendMessage(chunk);
         if (!res.ok) throw new Error(res.description);
+        start += 4000;
       }
     };
 
     (async () => {
       try {
-        // Русский
-        const chunksRU = splitBySections(buildMessage('ru'), 'ru');
-        await sendChunksSequentially(chunksRU);
-
-        // Английский
-        const chunksEN = splitBySections(buildMessage('en'), 'en');
-        await sendChunksSequentially(chunksEN);
-
+        for (const msg of messages) {
+          await sendAllParts(msg);
+        }
         alert('✅ Чеклист отправлен!');
-        localStorage.clear();
+        localStorage.clear(); // Сброс только после успешной отправки
       } catch (err) {
         alert('❌ Ошибка при отправке: ' + err.message);
         console.error(err);
       }
     })();
-
   });
 });
